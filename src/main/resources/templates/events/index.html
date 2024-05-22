@@ -6,8 +6,11 @@
 </head>
 <body>
     <h1>Events Index Page</h1>
+    <p th:unless="${events} and ${events.size()}">Sorry, there are no events at this time.</p>
     <ol>
         <li th:each="event : ${events}" th:text="${event}">Event Name</li>
     </ol>
+    <br>
+    <a href="events/create">Create An Event</a>
 </body>
 </html>
