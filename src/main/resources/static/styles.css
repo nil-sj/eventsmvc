@@ -1,0 +1,40 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: purple;
+    padding: 3rem 0;
+    background-color: #e0e0e0;
+    text-align: center;
+}
+
+nav {
+    display: block;
+    width: 100%;
+    background-color: #c3c3c3;
+    padding: 0.5rem 0.5rem;
+    border-bottom: 2px solid purple;
+    border-top: 2px solid purple;
+    margin-bottom: 1rem;
+}
+
+nav ul {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    list-style-type: none;
+    font: 1.2rem "Fira Sans", sans-serif;
+}
+
+nav ul li {
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+nav ul li a {
+    text-decoration: none;
+}
