@@ -14,10 +14,10 @@ nav {
     display: block;
     width: 100%;
     background-color: #c3c3c3;
-    padding: 0.5rem 0.5rem;
     border-bottom: 2px solid purple;
     border-top: 2px solid purple;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
+    padding-top: 1rem;
 }
 
 nav ul {
@@ -27,7 +27,7 @@ nav ul {
     align-items: center;
     justify-content: center;
     list-style-type: none;
-    font: 1.2rem "Fira Sans", sans-serif;
+    font: 1rem "Fira Sans", sans-serif;
 }
 
 nav ul li {

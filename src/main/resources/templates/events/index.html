@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org/">
 <head th:replace="fragments :: head"></head>
-<body>
-    <h1>Events Index Page</h1>
-    <nav th:replace="fragments :: navigation"></nav>
+<body class="container">
+    <header th:replace="fragments :: header"></header>
+    <br>
+    <h4>List of Events</h4>
     <p th:unless="${events} and ${events.size()}">Sorry, there are no events at this time.</p>
     <ol>
         <li th:each="event : ${events}" th:text="${event}">Event Name</li>
     </ol>
+
+    <h4>Events Table</h4>
+    <table class="table table-striped">
+        <thead>
+            <th>Event Name</th>
+        </thead>
+        <tbody>
+            <tr th:each="event : ${events}">
+                <td th:text="${event}"></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

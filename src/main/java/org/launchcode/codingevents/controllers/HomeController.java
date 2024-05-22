@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     @GetMapping
-    public String index() {
+    public String index(Model model) {
+        String title = "Coding Events - Thymeleaf";
+        model.addAttribute("title", title);
         return "index";
     }
 }

@@ -18,11 +18,15 @@ public class EventController {
     @GetMapping
     public String events(Model model) {
         model.addAttribute("events", events);
+        String title = "Coding Events - Thymeleaf";
+        model.addAttribute("title", title);
         return "events/index";
     }
 
     @GetMapping("create")
-    public String eventCreate() {
+    public String eventCreate(Model model) {
+        String title = "Coding Events - Thymeleaf";
+        model.addAttribute("title", title);
         return "events/create";
     }
 
