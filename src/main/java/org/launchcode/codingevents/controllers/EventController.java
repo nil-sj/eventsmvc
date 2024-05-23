@@ -38,4 +38,21 @@ public class EventController {
         EventData.add(new Event(eventName, eventDescription));
         return "redirect:/events";
     }
+
+    @GetMapping("delete")
+    public String deleteEvent(Model model) {
+        model.addAttribute("title", "Coding Events - Thymeleaf");
+        model.addAttribute("events", EventData.getAll());
+        return "events/delete";
+    }
+
+    @PostMapping("delete")
+    public String removeEvent(@RequestParam(required = false) int[] eventIds) {
+        if (eventIds != null) {
+            for (int id : eventIds) {
+                EventData.remove(id);
+            }
+        }
+        return "redirect:/events";
+    }
 }
