@@ -10,7 +10,9 @@ public class HomeController {
     @GetMapping
     public String index(Model model) {
         String title = "Coding Events - Thymeleaf";
+        String subTitle = "Home Page";
         model.addAttribute("title", title);
+        model.addAttribute("subTitle", subTitle);
         return "index";
     }
 }

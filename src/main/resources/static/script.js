@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Page Loaded");
-    document.querySelector('body').style.backgroundColor = "#f3f3f3";
+    document.querySelector('body').style.backgroundColor = "#fefefe";
 });
 
 // may not work because I see the following notification at the top of my IntelliJ pane

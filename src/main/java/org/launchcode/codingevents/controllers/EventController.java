@@ -19,14 +19,18 @@ public class EventController {
     public String events(Model model) {
         model.addAttribute("events", EventData.getAll());
         String title = "Coding Events - Thymeleaf";
+        String subTitle = "List of Events";
         model.addAttribute("title", title);
+        model.addAttribute("subTitle", subTitle);
         return "events/index";
     }
 
     @GetMapping("create")
     public String eventCreate(Model model) {
         String title = "Coding Events - Thymeleaf";
+        String subTitle = "Form: Create An Event";
         model.addAttribute("title", title);
+        model.addAttribute("subTitle", subTitle);
         return "events/create";
     }
 
@@ -39,6 +43,7 @@ public class EventController {
     @GetMapping("delete")
     public String deleteEvent(Model model) {
         model.addAttribute("title", "Coding Events - Thymeleaf");
+        model.addAttribute("subTitle", "Form: Delete Event(s)");
         model.addAttribute("events", EventData.getAll());
         return "events/delete";
     }
@@ -50,6 +55,24 @@ public class EventController {
                 EventData.remove(id);
             }
         }
+        return "redirect:/events";
+    }
+
+    @GetMapping("edit/{eventId}")
+    public String displayEditForm(Model model, @PathVariable int eventId) {
+        Event eventToEdit = EventData.getById(eventId);
+        model.addAttribute("event", eventToEdit);
+        String subTitle = "Edit Event " + eventToEdit.getName() + " (id=" + eventToEdit.getId() +  ")";
+        model.addAttribute("title", "Coding Events - Thymeleaf");
+        model.addAttribute("subTitle", subTitle);
+        return "events/edit";
+    }
+
+    @PostMapping("edit")
+    public String processEditForm(int eventId, String name, String description) {
+        Event eventToEdit = EventData.getById(eventId);
+        eventToEdit.setName(name);
+        eventToEdit.setDescription(description);
         return "redirect:/events";
     }
 }

@@ -4,7 +4,7 @@
 <body class="container">
     <header th:replace="fragments :: header"></header>
     <br>
-    <h4>List of Events</h4>
+    <h4 th:replace="fragments :: subTitle"></h4>
     <p th:unless="${events} and ${events.size()}">Sorry, there are no events at this time.</p>
     <ul>
         <li th:each="event : ${events}">
@@ -21,6 +21,7 @@
             <th>Event Name</th>
             <th>Event Description</th>
             <th>Event Location</th>
+            <th>Action</th>
         </thead>
         <tbody>
             <tr th:each="event : ${events}">
@@ -28,6 +29,7 @@
                 <td th:text="${event.name}"></td>
                 <td th:text="${event.description}"></td>
                 <td th:replace="fragments :: address"></td>
+                <td><a th:href="@{/events/edit/{id}(id=${event.id})}">Edit</a></td>
             </tr>
         </tbody>
     </table>
