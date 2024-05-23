@@ -1,5 +1,6 @@
 package org.launchcode.codingevents.controllers;
 
+import org.launchcode.codingevents.data.EventData;
 import org.launchcode.codingevents.models.Event;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +18,9 @@ import java.util.Map;
 @RequestMapping("events")
 public class EventController {
 
-    private static List<Event> events = new ArrayList<>();
     @GetMapping
     public String events(Model model) {
-        model.addAttribute("events", events);
+        model.addAttribute("events", EventData.getAll());
         String title = "Coding Events - Thymeleaf";
         model.addAttribute("title", title);
         return "events/index";
@@ -35,7 +35,7 @@ public class EventController {
 
     @PostMapping("create")
     public String addEvent(@RequestParam String eventName, @RequestParam String eventDescription) {
-        events.add(new Event(eventName, eventDescription));
+        EventData.add(new Event(eventName, eventDescription));
         return "redirect:/events";
     }
 }
