@@ -33,6 +33,7 @@ public class EventController {
         String subTitle = "Form: Create An Event";
         model.addAttribute("title", title);
         model.addAttribute("subTitle", subTitle);
+        model.addAttribute("event", new Event());
         return "events/create";
     }
 
@@ -41,7 +42,7 @@ public class EventController {
         if(errors.hasErrors()) {
             model.addAttribute("title", "Coding Events - Thymeleaf");
             model.addAttribute("subTitle", "Form: Create An Event - Correct the Errors!");
-            model.addAttribute("errorMessage", "Bad data!");
+            model.addAttribute("errorMessage", "Bad data! Please correct the following errors:");
             return "events/create";
         }
         EventData.add(newEvent);
@@ -77,10 +78,11 @@ public class EventController {
     }
 
     @PostMapping("edit")
-    public String processEditForm(int eventId, String name, String description) {
+    public String processEditForm(int eventId, String name, String description, String contactEmail) {
         Event eventToEdit = EventData.getById(eventId);
         eventToEdit.setName(name);
         eventToEdit.setDescription(description);
+        eventToEdit.setContactEmail(contactEmail);
         return "redirect:/events";
     }
 }
