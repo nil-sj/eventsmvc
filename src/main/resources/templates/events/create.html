@@ -5,6 +5,7 @@
     <header th:replace="fragments :: header"></header>
     <br>
     <h4 th:replace="fragments :: subTitle"></h4>
+    <p th:text="${errorMessage}" style="color:red;"></p>
     <form method="post" action="/events/create">
         <div class="form-group">
             <label for="name">Name: </label>
