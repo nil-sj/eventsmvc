@@ -22,6 +22,8 @@
             <th>Event Name</th>
             <th>Event Description</th>
             <th>Event Location</th>
+            <th>Registration Required?</th>
+            <th>Number of Attendees</th>
             <th>Contact Email</th>
             <th>Action</th>
         </thead>
@@ -30,11 +32,19 @@
                 <td th:text="${event.id}"></td>
                 <td th:text="${event.name}"></td>
                 <td th:text="${event.description}"></td>
-                <td th:replace="fragments :: address"></td>
+                <td th:text="${event.location}"></td>
+                <td>
+                    <th:block th:if="${event.shouldRegister}">Yes</th:block>
+                    <th:block th:unless="${event.shouldRegister}">No</th:block>
+                </td>
+                <td th:text="${event.numberOfAttendees}"></td>
                 <td th:text="${event.contactEmail}"></td>
                 <td><a th:href="@{/events/edit/{id}(id=${event.id})}">Edit</a></td>
             </tr>
         </tbody>
     </table>
+    <footer>
+        <p>Event Registration Office Address:<span th:replace="fragments :: address"></span></p>
+    </footer>
 </body>
 </html>

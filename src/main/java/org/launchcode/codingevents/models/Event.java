@@ -1,8 +1,6 @@
 package org.launchcode.codingevents.models;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.Objects;
 
@@ -14,7 +12,12 @@ public class Event {
     private String name;
     @Size(max = 500, message = "Description too long!")
     private String description;
-
+    @NotBlank(message="Location cannot be left blank.")
+    private String location;
+    @AssertTrue(message="Attendees must register for the event.")
+    private boolean shouldRegister;
+    @Positive(message="Number of attendees must be one or more.")
+    private int numberOfAttendees;
     @Email(message = "Invalid email. Try again.")
     private String contactEmail;
 
@@ -22,10 +25,13 @@ public class Event {
         this.id = nextId;
         nextId++;
     }
-    public Event(String name, String description, String contactEmail) {
+    public Event(String name, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail) {
         this();
         this.name = name;
         this.description = description;
+        this.location = location;
+        this.shouldRegister = shouldRegister;
+        this.numberOfAttendees = numberOfAttendees;
         this.contactEmail = contactEmail;
     }
 
@@ -48,6 +54,18 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getLocation() { return location; }
+
+    public void setLocation(String location) { this.location = location; }
+
+    public boolean isShouldRegister() { return shouldRegister; }
+
+    public void setShouldRegister(boolean shouldRegister) { this.shouldRegister = shouldRegister; }
+
+    public int getNumberOfAttendees() { return numberOfAttendees; }
+
+    public void setNumberOfAttendees(int numberOfAttendees) { this.numberOfAttendees = numberOfAttendees; }
 
     public String getContactEmail() { return contactEmail; }
 
