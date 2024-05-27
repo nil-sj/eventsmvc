@@ -10,6 +10,7 @@ public class Event {
     @NotBlank(message="Name is required")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
+    private EventType type;
     @Size(max = 500, message = "Description too long!")
     private String description;
     @NotBlank(message="Location cannot be left blank.")
@@ -25,9 +26,10 @@ public class Event {
         this.id = nextId;
         nextId++;
     }
-    public Event(String name, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail) {
+    public Event(String name, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail, EventType type) {
         this();
         this.name = name;
+        this.type = type;
         this.description = description;
         this.location = location;
         this.shouldRegister = shouldRegister;
@@ -46,6 +48,10 @@ public class Event {
     public void setName(String name) {
         this.name = name;
     }
+
+    public EventType getType() { return type; }
+
+    public void setType(EventType type) { this.type = type; }
 
     public String getDescription() {
         return description;

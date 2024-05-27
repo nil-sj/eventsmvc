@@ -3,6 +3,7 @@ package org.launchcode.codingevents.controllers;
 import jakarta.validation.Valid;
 import org.launchcode.codingevents.data.EventData;
 import org.launchcode.codingevents.models.Event;
+import org.launchcode.codingevents.models.EventType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -34,6 +35,7 @@ public class EventController {
         model.addAttribute("title", title);
         model.addAttribute("subTitle", subTitle);
         model.addAttribute("event", new Event());
+        model.addAttribute("types", EventType.values());
         return "events/create";
     }
 
@@ -74,13 +76,15 @@ public class EventController {
         String subTitle = "Edit Event " + eventToEdit.getName() + " (id=" + eventToEdit.getId() +  ")";
         model.addAttribute("title", "Coding Events - Thymeleaf");
         model.addAttribute("subTitle", subTitle);
+        model.addAttribute("types", EventType.values());
         return "events/edit";
     }
 
     @PostMapping("edit")
-    public String processEditForm(int eventId, String name, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail) {
+    public String processEditForm(int eventId, String name, EventType type, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail) {
         Event eventToEdit = EventData.getById(eventId);
         eventToEdit.setName(name);
+        eventToEdit.setType(type);
         eventToEdit.setDescription(description);
         eventToEdit.setLocation(location);
         eventToEdit.setShouldRegister(shouldRegister);
