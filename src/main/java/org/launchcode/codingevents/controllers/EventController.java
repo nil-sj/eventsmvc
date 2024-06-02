@@ -1,26 +1,25 @@
 package org.launchcode.codingevents.controllers;
 
 import jakarta.validation.Valid;
-import org.launchcode.codingevents.data.EventData;
+import org.launchcode.codingevents.data.EventRepository;
 import org.launchcode.codingevents.models.Event;
 import org.launchcode.codingevents.models.EventType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Controller
 @RequestMapping("events")
 public class EventController {
 
+    @Autowired
+    private EventRepository eventRepository;
+
     @GetMapping
     public String events(Model model) {
-        model.addAttribute("events", EventData.getAll());
+        model.addAttribute("events", eventRepository.findAll());
         String title = "Coding Events - Thymeleaf";
         String subTitle = "List of Events";
         model.addAttribute("title", title);
@@ -47,7 +46,7 @@ public class EventController {
             model.addAttribute("errorMessage", "Bad data! Please correct the following errors:");
             return "events/create";
         }
-        EventData.add(newEvent);
+        eventRepository.save(newEvent);
         return "redirect:/events";
     }
 
@@ -55,7 +54,7 @@ public class EventController {
     public String deleteEvent(Model model) {
         model.addAttribute("title", "Coding Events - Thymeleaf");
         model.addAttribute("subTitle", "Form: Delete Event(s)");
-        model.addAttribute("events", EventData.getAll());
+        model.addAttribute("events", eventRepository.findAll());
         return "events/delete";
     }
 
@@ -63,33 +62,33 @@ public class EventController {
     public String removeEvent(@RequestParam(required = false) int[] eventIds) {
         if (eventIds != null) {
             for (int id : eventIds) {
-                EventData.remove(id);
+                eventRepository.deleteById(id);
             }
         }
         return "redirect:/events";
     }
 
-    @GetMapping("edit/{eventId}")
-    public String displayEditForm(Model model, @PathVariable int eventId) {
-        Event eventToEdit = EventData.getById(eventId);
-        model.addAttribute("event", eventToEdit);
-        String subTitle = "Edit Event " + eventToEdit.getName() + " (id=" + eventToEdit.getId() +  ")";
-        model.addAttribute("title", "Coding Events - Thymeleaf");
-        model.addAttribute("subTitle", subTitle);
-        model.addAttribute("types", EventType.values());
-        return "events/edit";
-    }
-
-    @PostMapping("edit")
-    public String processEditForm(int eventId, String name, EventType type, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail) {
-        Event eventToEdit = EventData.getById(eventId);
-        eventToEdit.setName(name);
-        eventToEdit.setType(type);
-        eventToEdit.setDescription(description);
-        eventToEdit.setLocation(location);
-        eventToEdit.setShouldRegister(shouldRegister);
-        eventToEdit.setNumberOfAttendees(numberOfAttendees);
-        eventToEdit.setContactEmail(contactEmail);
-        return "redirect:/events";
-    }
+//    @GetMapping("edit/{eventId}")
+//    public String displayEditForm(Model model, @PathVariable int eventId) {
+//        Event eventToEdit = EventData.getById(eventId);
+//        model.addAttribute("event", eventToEdit);
+//        String subTitle = "Edit Event " + eventToEdit.getName() + " (id=" + eventToEdit.getId() +  ")";
+//        model.addAttribute("title", "Coding Events - Thymeleaf");
+//        model.addAttribute("subTitle", subTitle);
+//        model.addAttribute("types", EventType.values());
+//        return "events/edit";
+//    }
+//
+//    @PostMapping("edit")
+//    public String processEditForm(int eventId, String name, EventType type, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail) {
+//        Event eventToEdit = EventData.getById(eventId);
+//        eventToEdit.setName(name);
+//        eventToEdit.setType(type);
+//        eventToEdit.setDescription(description);
+//        eventToEdit.setLocation(location);
+//        eventToEdit.setShouldRegister(shouldRegister);
+//        eventToEdit.setNumberOfAttendees(numberOfAttendees);
+//        eventToEdit.setContactEmail(contactEmail);
+//        return "redirect:/events";
+//    }
 }
