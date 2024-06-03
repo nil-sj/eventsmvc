@@ -4,11 +4,14 @@ import jakarta.validation.Valid;
 import org.launchcode.codingevents.data.EventCategoryRepository;
 import org.launchcode.codingevents.data.EventRepository;
 import org.launchcode.codingevents.models.Event;
+import org.launchcode.codingevents.models.EventCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("events")
@@ -21,12 +24,24 @@ public class EventController {
     private EventCategoryRepository eventCategoryRepository;
 
     @GetMapping
-    public String events(Model model) {
-        model.addAttribute("events", eventRepository.findAll());
+    public String events(@RequestParam(required = false) Integer categoryId, Model model) {
+        if (categoryId == null) {
+            model.addAttribute("events", eventRepository.findAll());
+            String subTitle = "List of All Events";
+            model.addAttribute("subTitle", subTitle);
+        } else {
+            Optional<EventCategory> result = eventCategoryRepository.findById(categoryId);
+            if (result.isEmpty()) {
+                model.addAttribute("subTitle","Invalid Category ID: " + categoryId);
+            } else {
+                EventCategory eventCategory = result.get();
+                model.addAttribute("subTitle", "Events in Category: " + eventCategory.getName());
+                model.addAttribute("events", eventCategory.getEvents());
+            }
+        }
         String title = "Coding Events - Thymeleaf";
-        String subTitle = "List of Events";
         model.addAttribute("title", title);
-        model.addAttribute("subTitle", subTitle);
+
         return "events/index";
     }
 
