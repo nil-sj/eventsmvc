@@ -1,11 +1,8 @@
 package org.launchcode.codingevents.models;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.*;
-
-import java.util.Objects;
 
 @Entity
 public class Event extends AbstractEntity{
@@ -13,7 +10,9 @@ public class Event extends AbstractEntity{
     @NotBlank(message="Name is required")
     @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
-    private EventType type;
+    @ManyToOne
+    @NotNull(message = "Event category is required.")
+    private EventCategory eventCategory;
     @Size(max = 500, message = "Description too long!")
     private String description;
     @NotBlank(message="Location cannot be left blank.")
@@ -27,9 +26,9 @@ public class Event extends AbstractEntity{
 
     public Event() {}
 
-    public Event(String name, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail, EventType type) {
+    public Event(String name, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail, EventCategory eventCategory) {
         this.name = name;
-        this.type = type;
+        this.eventCategory = eventCategory;
         this.description = description;
         this.location = location;
         this.shouldRegister = shouldRegister;
@@ -45,9 +44,9 @@ public class Event extends AbstractEntity{
         this.name = name;
     }
 
-    public EventType getType() { return type; }
+    public EventCategory getEventCategory() { return eventCategory; }
 
-    public void setType(EventType type) { this.type = type; }
+    public void setEventCategory(EventCategory eventCategory) { this.eventCategory = eventCategory; }
 
     public String getDescription() {
         return description;
