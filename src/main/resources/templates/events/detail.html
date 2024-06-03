@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+<header th:replace="fragments :: header"></header>
+<br>
+<h4 th:replace="fragments :: subTitle"></h4>
+
+<br>
+<h5>Event Details</h5>
+<table class="table table-striped">
+    <tr>
+        <th>Event ID</th>
+        <td th:text="${event.id}"></td>
+    </tr>
+    <tr>
+        <th>Event Category</th>
+        <td th:text="${event.eventCategory.name}"></td>
+    </tr>
+    <tr>
+        <th>Event Description</th>
+        <td th:text="${event.eventDetails.description}"></td>
+    </tr>
+    <tr>
+        <th>Event Location</th>
+        <td th:text="${event.eventDetails.location}"></td>
+    </tr>
+    <tr>
+        <th>Registration Required?</th>
+        <td>
+            <th:block th:if="${event.eventDetails.shouldRegister}">Yes</th:block>
+            <th:block th:unless="${event.eventDetails.shouldRegister}">No</th:block>
+        </td>
+    </tr>
+    <tr>
+        <th>Number of Attendees</th>
+        <td th:text="${event.eventDetails.numberOfAttendees}"></td>
+    </tr>
+    <tr>
+        <th>Contact Email</th>
+        <td th:text="${event.eventDetails.contactEmail}"></td>
+    </tr>
+    <tr>
+        <th>Event Tags</th>
+        <td>
+            <span th:each="tag : ${tags}" th:text="${tag.getDisplayName()} + ' '"></span>
+        </td>
+    </tr>
+    <tr>
+        <th>Action(s)</th>
+        <td><a th:href="'/events/add-tag?eventId=' + ${event.id}">Add Tag</a></td>
+    </tr>
+</table>
+<br>
+<p style="text-align: right;">Want to modify the details for this event? Click <a th:href="@{/events/edit/{id}(id=${event.id})}">Edit Event</a>.</p>
+<br>
+<p>Want to browse more events? Go back to the <a th:href="@{/events}">List of Events</a></p>
+<br>
+<br>
+<hr>
+<footer>
+    <p>Event Registration Office Address:<span th:replace="fragments :: address"></span></p>
+</footer>
+</body>
+</html>

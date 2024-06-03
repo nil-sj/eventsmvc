@@ -3,8 +3,11 @@ package org.launchcode.codingevents.controllers;
 import jakarta.validation.Valid;
 import org.launchcode.codingevents.data.EventCategoryRepository;
 import org.launchcode.codingevents.data.EventRepository;
+import org.launchcode.codingevents.data.TagRepository;
 import org.launchcode.codingevents.models.Event;
 import org.launchcode.codingevents.models.EventCategory;
+import org.launchcode.codingevents.models.Tag;
+import org.launchcode.codingevents.models.dto.EventTagDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +26,16 @@ public class EventController {
     @Autowired
     private EventCategoryRepository eventCategoryRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
+
     @GetMapping
-    public String events(@RequestParam(required = false) Integer categoryId, Model model) {
-        if (categoryId == null) {
+    public String events(@RequestParam(required = false) Integer categoryId, @RequestParam(required = false) Integer tagId, Model model) {
+        if (categoryId == null && tagId == null) {
             model.addAttribute("events", eventRepository.findAll());
             String subTitle = "List of All Events";
             model.addAttribute("subTitle", subTitle);
-        } else {
+        } else if (categoryId != null && tagId == null) {
             Optional<EventCategory> result = eventCategoryRepository.findById(categoryId);
             if (result.isEmpty()) {
                 model.addAttribute("subTitle","Invalid Category ID: " + categoryId);
@@ -39,10 +45,35 @@ public class EventController {
                 model.addAttribute("events", eventCategory.getEvents());
             }
         }
+        else if (categoryId == null && tagId != null) {
+            Optional<Tag> result = tagRepository.findById(tagId);
+            if (result.isEmpty()) {
+                model.addAttribute("subTitle","Invalid Tag: " + tagId);
+            } else {
+                Tag tag = result.get();
+                model.addAttribute("subTitle", "Events with Tag: " + tag.getName());
+                model.addAttribute("events", tag.getEvents());
+            }
+        }
         String title = "Coding Events - Thymeleaf";
         model.addAttribute("title", title);
 
         return "events/index";
+    }
+
+    @GetMapping("detail")
+    public String eventDetails(@RequestParam Integer eventId, Model model) {
+        Optional<Event> result = eventRepository.findById(eventId);
+        if (result.isEmpty()) {
+            model.addAttribute("subTitle","Invalid Event ID: " + eventId);
+        } else {
+            Event event = result.get();
+            model.addAttribute("subTitle", "Details for the Event: " + event.getName());
+            model.addAttribute("event", event);
+            model.addAttribute("tags", event.getTags());
+        }
+        model.addAttribute("title", "Coding Events - Thymeleaf");
+        return "events/detail";
     }
 
     @GetMapping("create")
@@ -84,6 +115,34 @@ public class EventController {
             }
         }
         return "redirect:/events";
+    }
+
+    @GetMapping("add-tag")
+    public String displayAddTagForm(@RequestParam Integer eventId, Model model) {
+        Optional<Event> result = eventRepository.findById(eventId);
+        Event event = result.get();
+        model.addAttribute("title", "Coding Events - Thymeleaf");
+        model.addAttribute("subTitle", "Add Tag to: " + event.getName());
+        model.addAttribute("tags", tagRepository.findAll());
+        model.addAttribute("event", event);
+        EventTagDTO eventTag = new EventTagDTO();
+        eventTag.setEvent(event);
+        model.addAttribute("eventTag", eventTag);
+        return "events/add-tag";
+    }
+
+    @PostMapping("add-tag")
+    public String processAddTagForm(@ModelAttribute @Valid EventTagDTO eventTag, Errors errors, Model model) {
+        if (!errors.hasErrors()) {
+            Event event = eventTag.getEvent();
+            Tag tag = eventTag.getTag();
+            if (!event.getTags().contains(tag)){
+                event.addTag(tag);
+                eventRepository.save(event);
+            }
+            return "redirect:detail?eventId=" + event.getId();
+        }
+        return "redirect:/add-tag";
     }
 
 //    @GetMapping("edit/{eventId}")

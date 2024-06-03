@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body class="container">
+    <header th:replace="fragments :: header"></header>
+    <br>
+    <h4 th:replace="fragments :: subTitle"></h4>
+    <p th:unless="${tags} and ${tags.size()}">Sorry, there are no tags at this time.</p>
+
+    <th:block th:if="${tags} and ${tags.size()}">
+        <h5>Tags Table</h5>
+        <table class="table table-striped w-auto">
+            <thead>
+            <th>Tag ID</th>
+            <th>Tag Name</th>
+            </thead>
+            <tbody>
+            <tr th:each="tag : ${tags}">
+                <td th:text="${tag.id}"></td>
+                <td><a th:href="'/events?tagId='+${tag.id}" th:text="${tag.getDisplayName()}"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </th:block>
+
+
+
+</body>
+</html>
