@@ -145,27 +145,46 @@ public class EventController {
         return "redirect:/add-tag";
     }
 
-//    @GetMapping("edit/{eventId}")
-//    public String displayEditForm(Model model, @PathVariable int eventId) {
-//        Event eventToEdit = EventData.getById(eventId);
-//        model.addAttribute("event", eventToEdit);
-//        String subTitle = "Edit Event " + eventToEdit.getName() + " (id=" + eventToEdit.getId() +  ")";
-//        model.addAttribute("title", "Coding Events - Thymeleaf");
-//        model.addAttribute("subTitle", subTitle);
-//        model.addAttribute("types", EventType.values());
-//        return "events/edit";
-//    }
-//
-//    @PostMapping("edit")
-//    public String processEditForm(int eventId, String name, EventType type, String description, String location, boolean shouldRegister, int numberOfAttendees, String contactEmail) {
-//        Event eventToEdit = EventData.getById(eventId);
-//        eventToEdit.setName(name);
-//        eventToEdit.setType(type);
-//        eventToEdit.setDescription(description);
-//        eventToEdit.setLocation(location);
-//        eventToEdit.setShouldRegister(shouldRegister);
-//        eventToEdit.setNumberOfAttendees(numberOfAttendees);
-//        eventToEdit.setContactEmail(contactEmail);
-//        return "redirect:/events";
-//    }
+    @GetMapping("edit/{eventId}")
+    public String displayEditForm(Model model, @PathVariable int eventId) {
+        Optional<Event> result = eventRepository.findById(eventId);
+        if (result.isEmpty()) {
+            model.addAttribute("subTitle","Invalid Event ID: " + eventId);
+        } else {
+            Event eventToEdit = result.get();
+            model.addAttribute("subTitle", "Edit the Details for the Event: " + eventToEdit.getName() + " (Event Id: " + eventId + ")");
+            model.addAttribute("event", eventToEdit);
+            model.addAttribute("eventCategories", eventCategoryRepository.findAll());
+            //            model.addAttribute("tags", event.getTags());
+        }
+        model.addAttribute("title", "Coding Events - Thymeleaf");
+        return "events/edit";
+    }
+
+
+
+    @PostMapping("edit")
+    public String processEditForm(@ModelAttribute @Valid Event event, Errors errors, Model model, int id) {
+        if(errors.hasErrors()) {
+            model.addAttribute("title", "Coding Events - Thymeleaf");
+            model.addAttribute("subTitle", "Edit the Details for the Event: " + event.getName() + "(Event Id: " + event.getId() + ") - Correct the Errors!");
+            model.addAttribute("eventCategories", eventCategoryRepository.findAll());
+            model.addAttribute("event", event);
+            return "redirect:/events/edit/" + id;
+        }
+        Optional<Event> result = eventRepository.findById(id);
+        if (result.isEmpty()) {
+            eventRepository.save(event);
+            return "redirect:/events";
+        } else {
+            Event editedEvent = result.get();
+            editedEvent.setName(event.getName());
+            editedEvent.setEventCategory(event.getEventCategory());
+            editedEvent.setEventDetails(event.getEventDetails());
+            eventRepository.save(editedEvent);
+            model.addAttribute("event", editedEvent);
+        }
+        return "redirect:/events/detail?eventId=" + id;
+    }
+
 }

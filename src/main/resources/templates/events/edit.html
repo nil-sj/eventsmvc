@@ -5,44 +5,53 @@
 <header th:replace="fragments :: header"></header>
 <br>
 <h4 th:replace="fragments :: subTitle"></h4>
+<th:block th:if="${event}">
 <form method="post" th:action="@{/events/edit}">
     <div class="form-group">
-        <input type="hidden" th:value="${event.id}" name="eventId">
+        <input type="hidden" th:field="${event.id}">
     </div>
     <div class="form-group">
         <label for="name">Name: </label>
-        <input type="text" name="name" id="name" th:value="${event.name}" class="form-control">
+        <input type="text" th:field="${event.name}" class="form-control">
+        <p class="error" th:errors="${event.name}"></p>
     </div>
     <div class="form-group">
-        <label for="type">Event Type: </label>
-        <select th:field="${event.type}" class="form-select">
-            <option th:each="type : ${types}" th:value="${type}" th:text="${type.displayName}" th:selected="${type.equals(event.type)}"></option>
+        <label for="eventCategory">Event Category: </label>
+        <select th:field="${event.eventCategory}" class="form-select">
+            <option th:each="eventCategory : ${eventCategories}" th:value="${eventCategory.id}" th:text="${eventCategory.name}" th:selected="${event.eventCategory}"></option>
         </select>
+        <p class="error" th:errors="${event.eventCategory}"></p>
     </div>
     <div class="form-group">
-        <label for="description">Description: </label>
-        <input type="text" name="description" id="description" th:value="${event.description}" class="form-control">
+        <label for="eventDetails.description">Description: </label>
+        <input type="text" th:field="${event.eventDetails.description}" class="form-control">
+        <p class="error" th:errors="${event.eventDetails.description}"></p>
     </div>
     <div class="form-group">
-        <label for="location">Location: </label>
-        <input type="text" name="location" id="location" th:value="${event.location}" class="form-control">
+        <label for="eventDetails.location">Location: </label>
+        <input type="text" th:field="${event.eventDetails.location}" class="form-control">
+        <p class="error" th:errors="${event.eventDetails.location}"></p>
     </div>
     <div class="form-check">
-        <input type="checkbox" th:field="${event.shouldRegister}" class="form-check-input">
-        <label for="shouldRegister" class="form-check-label">Registration Required</label>
+        <input type="checkbox" th:field="${event.eventDetails.shouldRegister}" class="form-check-input">
+        <label for="eventDetails.shouldRegister" class="form-check-label">Registration Required</label>
+        <p class="error" th:errors="${event.eventDetails.shouldRegister}"></p>
     </div>
     <div class="form-group">
-        <label for="numberOfAttendees">Number of Attendees: </label>
-        <input type="number" name="numberOfAttendees" id="numberOfAttendees" th:value="${event.numberOfAttendees}" class="form-control">
+        <label for="eventDetails.numberOfAttendees">Number of Attendees: </label>
+        <input type="number" th:field="${event.eventDetails.numberOfAttendees}" class="form-control">
+        <p class="error" th:errors="${event.eventDetails.numberOfAttendees}"></p>
     </div>
     <div class="form-group">
-        <label for="contactEmail">Contact Email: </label>
-        <input type="text" name="contactEmail" id="contactEmail" th:value="${event.contactEmail}" class="form-control">
+        <label for="eventDetails.contactEmail">Contact Email: </label>
+        <input type="text" th:field="${event.eventDetails.contactEmail}" class="form-control">
+        <p class="error" th:errors="${event.eventDetails.contactEmail}"></p>
     </div>
     <br>
     <div class="form-group">
         <input type="submit" value="Update Event" class="btn btn-success">
     </div>
 </form>
+</th:block>
 </body>
 </html>

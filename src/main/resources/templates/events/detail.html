@@ -48,11 +48,12 @@
     </tr>
     <tr>
         <th>Action(s)</th>
-        <td><a th:href="'/events/add-tag?eventId=' + ${event.id}">Add Tag</a></td>
+        <td>
+            <a th:href="'/events/edit/' + ${event.id}">Edit Event</a>
+            <a th:href="'/events/add-tag?eventId=' + ${event.id}">Add Tag</a>
+        </td>
     </tr>
 </table>
-<br>
-<p style="text-align: right;">Want to modify the details for this event? Click <a th:href="@{/events/edit/{id}(id=${event.id})}">Edit Event</a>.</p>
 <br>
 <p>Want to browse more events? Go back to the <a th:href="@{/events}">List of Events</a></p>
 <br>
